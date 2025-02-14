@@ -1,0 +1,645 @@
+//------------------------------------------
+//	   	variables
+//------------------------------------------
+$font-family: "Kanit", serif;
+$body-font-family: $font-family;
+$heading-font-family: $font-family;
+$body-line-height: 1.6;
+$primary-color: #1260FE;
+$secondary-color: #fd8c12;
+$text-color: #000;
+$background-color: #F8F9FE;
+$toolbar-height: 80px;
+
+//------------------------------------------
+//	   	Typography
+//------------------------------------------
+html {
+  font-size: 100%;
+}
+
+body {
+  background: $background-color;
+  font-family: $font-family;
+  line-height: $body-line-height;
+  font-weight: 300;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-size: 16px;
+  letter-spacing: 0.25px;
+}
+
+.v-application {
+  font-family: $font-family !important;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .display-4,
+  .display-3,
+  .display-2,
+  .display-1,
+  .headline,
+  .title,
+  .subtitle-1,
+  .subtitle-2,
+  .body-1,
+  .body-2,
+  .caption,
+  .overline {
+    font-family: $font-family !important;
+  }
+
+  h1 {
+    font-size: 108px;
+    font-weight: light;
+    letter-spacing: -1.5px;
+  }
+
+  h2 {
+    font-size: 68px;
+    font-weight: light;
+    letter-spacing: 0.5px;
+  }
+
+  h3 {
+    font-size: 54px;
+    font-weight: normal;
+    letter-spacing: 05px;
+  }
+
+  h4 {
+    font-size: 38px;
+    font-weight: normal;
+    letter-spacing: 0.25px;
+  }
+
+  h5 {
+    font-size: 27px;
+    font-weight: normal;
+    letter-spacing: 0px;
+  }
+
+  h5 {
+    font-size: 23px;
+    font-weight: normal;
+    letter-spacing: 0.15px;
+  }
+
+  .button {
+    font-size: 17px;
+    font-weight: 400;
+    // letter-spacing: 1.25px;
+  }
+}
+
+//------------------------------------------
+//	   	Color
+//------------------------------------------
+.v-application {
+  .primary {
+    background-color: $primary-color !important;
+    border-color: $primary-color !important;
+  }
+
+  .secondary {
+    background-color: $secondary-color !important;
+    border-color: $secondary-color !important;
+  }
+
+  .primary--text {
+    color: $primary-color !important;
+    caret-color: $primary-color !important;
+  }
+
+  .secondary--text {
+    color: $secondary-color !important;
+  }
+
+  .light-background {
+    background-color: $background-color !important;
+  }
+}
+
+//------------------------------------------
+//	   	app bar
+//------------------------------------------
+.appbar-extend {
+  border-radius: 0 0 24px 24px !important;
+}
+
+.v-toolbar {
+  z-index: 100 !important;
+
+  .brand-logo {
+    text-decoration: none;
+    color: inherit;
+    font-weight: bold;
+
+    img {
+      height: 32px;
+      margin-right: 16px;
+      -webkit-transition: all 0.35s;
+      transition: all 0.35s;
+    }
+
+    @media screen and (min-width: 992px) {
+      img {
+        height: 40px;
+      }
+    }
+  }
+
+  .toolbar-menu {
+    -webkit-transition: all 0.35s;
+    transition: all 0.35s;
+    font-size: 17px;
+
+    &:hover {
+      color: $primary-color !important;
+
+      // &::before {
+      //   background-color: rgba(255, 255, 255, 0.9) !important;
+      // }
+    }
+
+    &.v-btn--active {
+      color: $primary-color;
+
+      &::before {
+        background-color: $primary-color;
+        opacity: 0;
+      }
+    }
+  }
+
+  &.transparent {
+    background-color: transparent !important;
+    -webkit-transition: all 0.35s;
+    transition: all 0.35s;
+
+    .toolbar-menu {
+      &.v-btn--active {
+        color: white;
+      }
+    }
+  }
+}
+
+//------------------------------------------
+//	   	Nav Menu
+//------------------------------------------
+.nav-menu {
+  .v-list-item {
+    -webkit-transition: all 0.35s;
+    transition: all 0.35s;
+    font-size: 17px;
+
+    &:hover {
+      color: $primary-color !important;
+    }
+
+    &.v-list-item--active {
+      color: $primary-color;
+
+      &::before {
+        background-color: $primary-color;
+        opacity: 0;
+      }
+    }
+  }
+}
+
+.theme--dark {
+  .v-list-item {
+    &:hover {
+      color: white !important;
+    }
+
+    &.v-list-item--active {
+      color: white;
+
+      &::before {
+        background-color: white;
+      }
+    }
+  }
+}
+
+//------------------------------------------
+//	   	Global
+//------------------------------------------
+a {
+  outline: 0;
+  text-decoration: none;
+  color: $primary-color;
+  -webkit-transition: all 0.35s;
+  transition: all 0.35s;
+
+  &.text {
+    color: inherit !important;
+  }
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+.main-wrapper {
+  position: relative;
+  background: $background-color;
+
+  &:before {
+    content: '';
+    position: fixed;
+    background: $primary-color;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40%
+  }
+}
+
+@media screen and (min-width: 1904px) {
+  .main-container {
+    max-width: 1320px !important;
+    position: relative;
+    z-index: 4;
+  }
+}
+
+section {
+  padding: 16px 0;
+
+  @media screen and (min-width: 992px) {
+    padding: 96px 0 64px;
+  }
+
+  .heading {
+    font-weight: bold !important;
+    margin-bottom: 32px
+  }
+
+
+}
+
+.heading-lead {
+  letter-spacing: 0.2rem !important;
+  position: relative;
+  padding-bottom: 16px;
+  padding-left: 48px !important;
+  text-transform: uppercase;
+
+  &:before {
+    content: '';
+    position: absolute;
+    background-color: #9a9a9a;
+    width: 40px;
+    height: 1px;
+    top: 50%;
+    left: 0;
+  }
+
+  &.primary--text:before {
+    background-color: $primary-color
+  }
+
+  &.secondary--text:before {
+    background-color: $secondary-color
+  }
+
+  &.dark:before {
+    background-color: #fff
+  }
+
+}
+
+.page-header {
+  background: $primary-color;
+  color: #fff;
+  position: relative;
+  text-align: center;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 1;
+    background-image: url("https://alonethemes.com/wp-content/uploads/revslider/societies-slider/str-bg-slider-1.jpg");
+    // background-image: url("../img/hero/bg-1.jpg");
+    background-size: cover;
+    background-position: top center;
+    opacity: 0.5;
+  }
+
+  .page-header-content {
+    position: relative;
+    z-index: 2;
+    padding: 208px 0 96px 0;
+
+    .page-header-title {
+      font-weight: 400 !important;
+      letter-spacing: 0.2rem !important;
+      position: relative;
+      padding-bottom: 24px;
+      margin: 0 0 8px 0;
+
+      &:before {
+        content: '';
+        position: absolute;
+        background-color: #fff;
+        width: 64px;
+        height: 1px;
+        left: 50%;
+        margin-left: -32px;
+        bottom: 0;
+      }
+    }
+
+    .v-breadcrumbs {
+      display: block;
+
+      a {
+        color: #fff !important;
+        opacity: 1 !important;
+      }
+
+      .v-breadcrumbs__item {
+        color: #fff !important;
+
+        &.v-breadcrumbs__item--disabled {
+          color: #fff !important;
+        }
+      }
+
+    }
+  }
+
+
+  @media screen and (min-width: 992px) {
+    margin-top: -64px;
+    padding-top: 64px;
+  }
+}
+
+//------------------------------------------
+//	   	pagination
+//------------------------------------------
+.v-pagination {
+
+  .v-pagination__navigation,
+  .v-pagination__item {
+    width: 50px;
+    height: 50px;
+    font-weight: 500;
+    box-shadow: 0 0 0 0 #fff;
+    border: 1px solid #e0e0e0;
+  }
+
+  .v-pagination__navigation {
+    .v-icon {
+      color: inherit;
+    }
+  }
+}
+
+//------------------------------------------
+//	   	bottom navigation
+//------------------------------------------
+.v-bottom-navigation {
+  .v-btn {
+    height: 40px !important;
+    border-radius: 20px !important;
+
+    &.v-btn--active {
+      position: relative;
+      color: $primary-color !important;
+
+      // background-color: red !important;
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: $primary-color;
+        opacity: 0.1 !important;
+      }
+    }
+  }
+}
+
+//------------------------------------------
+//	   	form
+//------------------------------------------
+.v-input__prepend-inner {
+  margin-right: 8px !important;
+}
+
+//------------------------------------------
+//	   	button
+//------------------------------------------
+.v-btn {
+  text-transform: capitalize;
+  font-weight: 400;
+  font-size: 17px !important;
+}
+
+//------------------------------------------
+//	   	drawer
+//------------------------------------------
+.v-navigation-drawer {
+  z-index: 100;
+}
+
+//------------------------------------------
+//	   	Divider
+//------------------------------------------
+.theme--dark.v-divider {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+//------------------------------------------
+//	   	Card
+//------------------------------------------
+.v-card__title {
+  word-break: inherit !important;
+}
+
+.v-card__text {
+  font-weight: 300 !important
+}
+
+
+//------------------------------------------
+//	   	List
+//------------------------------------------
+.v-list-item.v-list-item--active {
+  &.item-selected {
+    background-color: white;
+    color: $primary-color;
+
+    &::before {
+      background-color: white;
+    }
+  }
+}
+
+.v-list-item--link {
+  &:hover {
+    color: $primary-color !important;
+  }
+
+  &:hover {
+    .v-list-item__subtitle {
+
+      color: inherit !important
+    }
+  }
+}
+
+//------------------------------------------
+//	   	Widget
+//------------------------------------------
+.widget {
+  .widget-title {
+    font-weight: 400 !important;
+    position: relative;
+    padding-bottom: 8px !important;
+    margin-bottom: 24px;
+
+    &:before {
+      content: '';
+      position: absolute;
+      background-color: $primary-color;
+      width: 40px;
+      height: 2px;
+      left: 0;
+      bottom: 0;
+    }
+  }
+}
+
+//------------------------------------------
+//	   	Parallax
+//------------------------------------------
+.v-parallax__content {
+  padding: 0 !important;
+}
+
+//------------------------------------------
+//	   	Gradient background
+//------------------------------------------
+.gradient-bg {
+  background-image: radial-gradient(circle at 82% 63%,
+      rgba(183, 183, 183, 0.09) 0%,
+      rgba(183, 183, 183, 0.09) 84%,
+      transparent 84%,
+      transparent 100%),
+    radial-gradient(circle at 88% 98%,
+      rgba(232, 232, 232, 0.07) 0%,
+      rgba(232, 232, 232, 0.07) 15%,
+      transparent 15%,
+      transparent 100%),
+    radial-gradient(circle at 77% 83%,
+      rgba(252, 252, 252, 0.05) 0%,
+      rgba(252, 252, 252, 0.05) 5%,
+      transparent 5%,
+      transparent 100%),
+    radial-gradient(circle at 64% 0%,
+      rgba(140, 140, 140, 0.05) 0%,
+      rgba(140, 140, 140, 0.05) 54%,
+      transparent 54%,
+      transparent 100%),
+    radial-gradient(circle at 57% 86%,
+      rgba(241, 241, 241, 0.07) 0%,
+      rgba(241, 241, 241, 0.07) 80%,
+      transparent 80%,
+      transparent 100%),
+    radial-gradient(circle at 17% 93%,
+      rgba(68, 68, 68, 0.05) 0%,
+      rgba(68, 68, 68, 0.05) 82%,
+      transparent 82%,
+      transparent 100%),
+    radial-gradient(circle at 85% 70%,
+      rgba(10, 10, 10, 0.02) 0%,
+      rgba(10, 10, 10, 0.02) 13%,
+      transparent 13%,
+      transparent 100%);
+  position: relative;
+}
+
+.gradient-bgc::after {
+  position: absolute;
+  content: "";
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+//------------------------------------------
+//	   	Shadow
+//------------------------------------------
+.light-shadow {
+  // position: relative;
+
+  // &::before {
+  //   content: "";
+  //   position: absolute;
+  //   top: 16px;
+  //   right: 0px;
+  //   bottom: 16px;
+  //   left: 0px;
+  //   box-shadow: 0 0 64px 0 rgba(0, 0, 0, 0.2);
+  //   background-color: rgba(0, 0, 0, 0.1);
+  // }
+
+  box-shadow: 0 0 64px 0 rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.primary-shadow {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 16px;
+    right: 0px;
+    bottom: 16px;
+    left: 0px;
+    box-shadow: 0 4px 60px rgba(18, 96, 254, 0.12);
+    background-color: rgba(18, 96, 254, 0.06);
+  }
+}
+
+//------------------------------------------
+//	   	Text content
+//------------------------------------------
+.one-line {
+  overflow: hidden !important;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+.two-line {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
