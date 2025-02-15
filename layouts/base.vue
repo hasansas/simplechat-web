@@ -33,7 +33,7 @@ export default {
         {
           rel: "stylesheet",
           href:
-            "https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css",
         },
         { rel: "stylesheet", href: "https://cdn.lineicons.com/5.0/lineicons.css" },
         {
