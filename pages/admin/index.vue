@@ -87,13 +87,13 @@
     <v-card
       v-if="chat.selected === null"
       flat
-      class="grow d-flex align-center justify-center"
+      class="grow d-flex align-center justify-center mb-16"
     >
       <div class="text-center">
-        <div class="logo-x-large logo-disable">
+        <div class="logo-x-large logo-disable mb-8">
           <Logo />
         </div>
-        <div class="my-8">Please select a chat conversation</div>
+        <div>Please select a chat conversation</div>
       </div>
     </v-card>
     <v-navigation-drawer
@@ -344,18 +344,7 @@ export default {
             conversation: [],
           },
         ],
-        selected: {
-          id: "f7059c4e-b2a1-42eb-ac6f-3da9448e13f4",
-          user: {
-            id: "f7059c4e-b2a1-42eb-ac6f-3da9448e13f4",
-            name: "Baba Yaga",
-          },
-          status: "offline",
-          lastMessage:
-            "Pellentesque imperdiet sem mauris, sit amet euismod sapien egestas eget",
-          updatedAt: "2024-11-11T08:07:15.715Z",
-          conversation: [],
-        },
+        selected: null,
       },
       conversation: [
         {
@@ -391,7 +380,7 @@ export default {
         },
       ],
       contactInfo: {
-        drawer: true,
+        drawer: false,
         inputGroup: [0],
       },
     };
@@ -472,118 +461,6 @@ export default {
   }
   .v-tabs-items {
     background-color: rgba(255, 255, 255, 0) !important;
-  }
-}
-
-// Chat screen
-.chat-screen {
-  // background-color: #f3ede7 !important;
-  background-color: rgba(0, 0, 0, 0.03) !important;
-
-  .messages-container {
-    overflow-y: scroll;
-
-    .v-list-item {
-      min-height: auto;
-
-      .message {
-        margin-top: 2px;
-        background-color: white;
-        border-radius: 0px 8px 8px 8px;
-        display: block;
-        line-height: 1;
-        min-height: auto;
-        padding: 4px;
-        max-width: 80%;
-        filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.1));
-
-        .image-container {
-          position: relative;
-
-          .btn-action {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            z-index: 5;
-            opacity: 0;
-          }
-
-          &:hover {
-            .btn-action {
-              opacity: 1;
-            }
-          }
-        }
-
-        .text {
-          overflow: hidden;
-          display: inline-block;
-          font-size: 16px;
-          line-height: 1.25;
-          margin: 8px;
-          white-space: pre-line;
-          width: 100%;
-          padding-right: 12px;
-
-          ul {
-            list-style: none;
-          }
-
-          p {
-            margin: 0;
-          }
-        }
-
-        img {
-          max-width: 100%;
-        }
-
-        .text {
-          white-space: pre-line;
-        }
-
-        .document {
-          overflow: hidden;
-          line-break: anywhere;
-          background: #f5f6f6;
-          padding: 8px;
-        }
-
-        &:after {
-          position: absolute;
-          content: "";
-          width: 0;
-          height: 0;
-          border-style: solid;
-        }
-
-        // top arrow shape for received component:
-        &.received:after {
-          border-width: 0px 10px 10px 0;
-          border-color: transparent #fff transparent transparent;
-          top: 0;
-          left: -10px;
-        }
-
-        // top arrow shape for sent component:
-
-        &.sent {
-          background-color: #e2f3ff;
-          border-radius: 8px 0px 8px 8px;
-
-          &:after {
-            border-width: 0px 0 10px 10px;
-            border-color: transparent transparent transparent #e2f3ff;
-            top: 0;
-            right: -10px;
-          }
-        }
-      }
-    }
-  }
-
-  .messages-actions {
-    height: 64px;
   }
 }
 </style>
