@@ -271,7 +271,7 @@ export default {
 
       // redirect to login page
       this.$router.push({
-        path: "/login",
+        path: "/",
       });
     },
     toggleDarkMode() {
