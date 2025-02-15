@@ -20,7 +20,7 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Round' },]
   },
 
@@ -93,7 +93,7 @@ export default {
   ** moment
   */
   moment: {
-    defaultLocale: 'id',
-    locales: ['id']
+    // defaultLocale: 'id',
+    // locales: ['id']
   },
 }

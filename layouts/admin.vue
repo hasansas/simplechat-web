@@ -3,30 +3,62 @@
     <template v-if="isIOModuleLoaded">
       <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" fixed app>
         <template v-slot:prepend>
-          <v-list-item>
-            <v-list-item-icon class="mr-2">
-              <NuxtLogo />
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title class="headline"> AdmStarter </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+          <v-toolbar flat color="transparent">
+            <v-list-item class="pa-0">
+              <v-list-item-icon class="mr-2">
+                <Logo />
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title class="title primary--text">
+                  SimpleChat
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-toolbar>
         </template>
         <v-list class="nav-menu">
-          <v-list-item
-            v-for="(item, i) in navigationMenu"
-            :key="i"
-            :to="item.to"
-            router
-            exact
-          >
-            <v-list-item-action class="mr-2">
-              <v-icon size="20">{{ item.icon }}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+          <div v-for="(item, index) in navigationMenu" :key="index">
+            <v-expansion-panels v-if="item.children.length > 0" flat accordion>
+              <v-expansion-panel>
+                <v-expansion-panel-header class="py-0 px-4">
+                  <v-list-item class="px-0">
+                    <v-list-item-action class="mr-2">
+                      <v-icon size="20">{{ item.icon }}</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                      <v-list-item-title>{{ item.title }}</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <v-list-item
+                    v-for="(itemChild, i) in item.children"
+                    :key="i"
+                    :to="itemChild.to"
+                    router
+                    exact
+                  >
+                    <v-list-item-action class="mr-2">
+                      <v-icon size="16">{{ itemChild.icon }}</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                      <v-list-item-title class="subtitle-2 font-weight-light">{{
+                        itemChild.title
+                      }}</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+            </v-expansion-panels>
+            <v-list-item v-else :to="item.to" router exact>
+              <v-list-item-action class="mr-2">
+                <v-icon size="20">{{ item.icon }}</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </div>
         </v-list>
         <template v-slot:append>
           <v-divider></v-divider>
@@ -34,7 +66,7 @@
             <template v-slot:activator="{ on, attrs }">
               <v-card v-bind="attrs" v-on="on">
                 <v-list-item :class="miniVariant ? 'px-2' : ''">
-                  <v-list-item-avatar color="primary" class="mr-4">
+                  <v-list-item-avatar size="32" color="primary" class="mr-4">
                     <v-img
                       v-if="user.image.url !== null"
                       :aspect-ratio="1 / 1"
@@ -73,7 +105,15 @@
                   <v-icon size="20">ri-user-3-line</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
-                  <v-list-item-title>Profile settings</v-list-item-title>
+                  <v-list-item-title>Your profile</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item to="/admin/profile">
+                <v-list-item-icon class="mr-4">
+                  <v-icon size="20">ri-wallet-line</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>Billing</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item @click="logout">
@@ -88,18 +128,8 @@
           </v-menu>
         </template>
       </v-navigation-drawer>
-      <v-app-bar fixed flat app :color="!$vuetify.theme.dark ? 'white' : ''">
-        <v-btn icon @click.stop="miniVariant = !miniVariant">
-          <v-icon>
-            {{ miniVariant ? "ri-menu-3-line" : "ri-menu-2-line" }}
-          </v-icon>
-        </v-btn>
-        <v-toolbar-title>{{ title }}</v-toolbar-title>
-      </v-app-bar>
       <v-main>
-        <v-container>
-          <Nuxt />
-        </v-container>
+        <Nuxt />
       </v-main>
     </template>
   </app-base-layout>
@@ -113,7 +143,6 @@ export default {
   components: { appBaseLayout },
   head() {
     return {
-      title: "WA Web Blast",
       script: [
         {
           hid: "io",
@@ -141,19 +170,62 @@ export default {
       miniVariant: false,
       navigationMenu: [
         {
-          icon: "ri-dashboard-line",
-          title: "Dashboard",
+          icon: "ri-message-3-line",
+          title: "Live chat",
           to: "/admin",
+          children: [],
         },
         {
-          icon: "ri-newspaper-line",
-          title: "Blog",
-          to: "/blog",
+          icon: "ri-contacts-book-3-line",
+          title: "Contacts",
+          to: "#",
+          children: [],
         },
         {
-          icon: "ri-calendar-line",
-          title: "Events",
-          to: "/event",
+          icon: "ri-filter-3-line",
+          title: "Segnents",
+          to: "#",
+          children: [],
+        },
+        {
+          icon: "ri-space-ship-line",
+          title: "Campaign",
+          to: "#",
+          children: [],
+        },
+        {
+          icon: "ri-inbox-2-line",
+          title: "Ticket",
+          to: "#",
+          children: [],
+        },
+        {
+          icon: "ri-bar-chart-box-line",
+          title: "Report",
+          to: "#",
+          children: [],
+        },
+        {
+          icon: "ri-settings-line",
+          title: "Settings",
+          to: "#",
+          children: [
+            {
+              icon: "ri-group-2-line",
+              title: "Teams",
+              to: "#",
+            },
+            {
+              icon: "ri-layout-bottom-line",
+              title: "Widget",
+              to: "#",
+            },
+            {
+              icon: "ri-layout-masonry-line",
+              title: "Integrations",
+              to: "#",
+            },
+          ],
         },
       ],
     };

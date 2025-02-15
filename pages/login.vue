@@ -1,15 +1,14 @@
 <template>
   <v-container class="fill-height">
     <v-card flat class="login-container mx-auto">
-      <div class="d-flex align-center mb-16">
+      <div class="text-center mb-16">
         <v-spacer></v-spacer>
-        <NuxtLogo />
-        <div class="display-1 primary--text font-weight-medium ml-2">AdmStarter</div>
-        <v-spacer></v-spacer>
+        <Logo />
+        <div class="headline primary--text font-weight-medium ml-2">SimpleChat</div>
       </div>
       <v-card flat width="480" color="transparent" class="primary-shadow mx-auto">
         <v-card flat rounded="xxl" class="pa-16">
-          <v-card-title class="d-block text-center headline pa-0 mb-16">
+          <v-card-title class="d-block text-center headline font-weight-light pa-0 mb-16">
             Sign Into Your Account
           </v-card-title>
           <v-form @submit.stop.prevent="login" ref="loginForm" class="mt-4">
@@ -195,8 +194,8 @@ export default {
 
 <style lang="scss">
 .login-container {
-  .nuxt-logo {
-    height: 32px !important;
+  .app-logo {
+    height: 80px !important;
   }
 }
 </style>
