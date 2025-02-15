@@ -1,7 +1,13 @@
 <template>
   <app-base-layout>
     <template v-if="isIOModuleLoaded">
-      <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" fixed app>
+      <v-navigation-drawer
+        v-model="drawer"
+        :mini-variant="miniVariant"
+        stateless
+        fixed
+        app
+      >
         <template v-slot:prepend>
           <v-toolbar flat color="transparent">
             <v-list-item class="pa-0">
@@ -225,10 +231,25 @@ export default {
               title: "Integrations",
               to: "#",
             },
+            {
+              icon: "ri-robot-2-line",
+              title: "Chatbot",
+              to: "#",
+            },
           ],
         },
       ],
     };
+  },
+  watch: {
+    isIOModuleLoaded: {
+      handler: function (isIOloaded) {
+        if (isIOloaded) {
+          this.initIO();
+        }
+      },
+      deep: true,
+    },
   },
   methods: {
     async getUser() {
@@ -264,6 +285,25 @@ export default {
         }
       }
     },
+    initIO() {
+      const socket = io(process.env.API_URL);
+      const user = this.user;
+
+      socket.on("connected", function () {
+        socket.emit("connected", {
+          clientUser: user.clientId,
+        });
+      });
+
+      this.onChatMessageIncoming(socket);
+    },
+    onChatMessageIncoming(socket) {
+      const vm = this;
+      socket.on("chat_message", function (stream) {
+        const data = stream.data;
+        vm.$nuxt.$emit("indexChatIncomingMessage", data);
+      });
+    },
   },
   async mounted() {
     // set theme
@@ -277,6 +317,11 @@ export default {
 
     // get user
     await this.getUser();
+  },
+  beforeRouteLeave(to, from, next) {
+    const socket = io(process.env.API_URL);
+    socket.disconnect();
+    next();
   },
 };
 </script>

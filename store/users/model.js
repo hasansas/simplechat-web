@@ -73,6 +73,7 @@ class UserModel {
     this.userInfoModel = new UserInfoModel();
     this.model = {
       id: "",
+      clientId: "",
       name: "",
       email: "",
       phoneNumber: "",
@@ -91,6 +92,7 @@ class UserModel {
         { ...a, [key]: item[key] ?? this.model[key] }
       ), {});
 
+    _item.clientId = item?.client?.id ? item?.client?.id : _item.clientId;
     _item.image = item.image ? await this.imageModel.fromJson(item.image) : _item.image;
     _item.usersInfo = item.usersInfo ? await this.userInfoModel.fromJson(item.usersInfo) : _item.usersInfo;
     return _item;
