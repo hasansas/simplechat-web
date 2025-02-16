@@ -9,10 +9,13 @@
     </v-app-bar>
     <v-card flat class="fill-height grow d-flex align-center justify-center">
       <div class="text-center">
-        <div class="logo-x-large mb-8">
+        <div class="logo-x-large mb-16">
           <Logo />
         </div>
-        <div class="display-1 primary--text font-weight-medium ml-2">SimpleChat</div>
+        <div class="display-1 primary--text font-weight-medium">SimpleChat</div>
+        <div class="subtitle-1 primaryy--text font-weight-light mt-2">
+          Instant Support, Real Conversations!
+        </div>
       </div>
     </v-card>
   </diV>
@@ -24,12 +27,16 @@ export default {
     script: [
       {
         innerHTML: `(function (d) {
-            const t = 'script';
-            const g = d.createElement(t);
-            g.src = 'http://localhost:3355/sdk.js';
-            d.body.appendChild(g);
-            g.onload = function () {
-              SIMPLECHAT.init('12345');
+            const b = 'http://localhost:3355';
+            const k = '123456';
+            const s = d.createElement('script');
+            s.src = b + '/sdk.js';
+            d.body.appendChild(s);
+            s.onload = function () {
+              SIMPLECHAT.init({
+                base_url: b,
+                key: k
+              });
             }
           })(document)`,
         body: true,
