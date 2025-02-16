@@ -144,6 +144,7 @@
 <script>
 import { mapGetters } from "vuex";
 import appBaseLayout from "~/layouts/base.vue";
+import Convert from "~/helpers/convert.js";
 
 export default {
   components: { appBaseLayout },
@@ -164,6 +165,7 @@ export default {
   computed: {
     ...mapGetters({
       user: "users/user",
+      client: "client/data",
     }),
   },
   data() {
@@ -265,6 +267,10 @@ export default {
         });
       }
     },
+    async getClient() {
+      const clientId = this.user.clientId;
+      await this.$store.dispatch("client/show", { id: clientId });
+    },
     async logout() {
       // logout user
       await this.$store.dispatch("users/logout");
@@ -287,11 +293,10 @@ export default {
     },
     initIO() {
       const socket = io(process.env.API_URL);
-      const user = this.user;
-
+      const clientUser = Convert.stringToHex(this.client.id);
       socket.on("connected", function () {
         socket.emit("connected", {
-          clientUser: user.clientId,
+          clientUser: clientUser,
         });
       });
 
@@ -317,6 +322,9 @@ export default {
 
     // get user
     await this.getUser();
+
+    // get client
+    this.getClient();
   },
   beforeRouteLeave(to, from, next) {
     const socket = io(process.env.API_URL);

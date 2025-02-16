@@ -6,20 +6,15 @@
     >
       <slot v-if="isSettingsLoaded" />
     </div>
-    <v-sheet v-if="!isSettingsLoaded" class="loader">
-      <v-container class="fill-height">
-        <v-row align="center" class="text-center">
-          <v-col>
-            <v-progress-circular
-              :size="64"
-              :width="4"
-              color="primary"
-              indeterminate
-            ></v-progress-circular>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-sheet>
+    <v-card
+      v-if="!isSettingsLoaded"
+      flat
+      class="fill-height d-flex align-center justify-center"
+    >
+      <v-card flat height="32" width="72">
+        <div class="loader"></div>
+      </v-card>
+    </v-card>
   </v-app>
 </template>
 
@@ -67,13 +62,3 @@ export default {
   },
 };
 </script>
-
-<style lang="sass">
-.loader
-  position: absolute
-  height: 100vh
-  width: 100%
-  top: 0
-  left: 0
-  z-index: 2000
-</style>
