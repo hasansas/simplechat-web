@@ -40,4 +40,11 @@
     fill: rgba(0, 0, 0, 0.1);
   }
 }
+.theme--dark {
+  .logo-disable {
+    .app-logo {
+      fill: rgba(255, 255, 255, 0.9);
+    }
+  }
+}
 </style>
