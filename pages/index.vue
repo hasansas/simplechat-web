@@ -17,3 +17,24 @@
     </v-card>
   </diV>
 </template>
+
+<script>
+export default {
+  head: {
+    script: [
+      {
+        innerHTML: `(function (d) {
+            const t = 'script';
+            const g = d.createElement(t);
+            g.src = 'http://localhost:3355/sdk.js';
+            d.body.appendChild(g);
+            g.onload = function () {
+              SIMPLECHAT.init('12345');
+            }
+          })(document)`,
+        body: true,
+      },
+    ],
+  },
+};
+</script>

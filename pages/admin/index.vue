@@ -104,7 +104,7 @@
       class="chat-screen grow elevation-0"
     >
       <template v-slot:prepend>
-        <v-toolbar flat color="white">
+        <v-toolbar flat :color="$vuetify.theme.dark ? '#363636' : 'white'">
           <v-list-item class="pa-0">
             <v-list-item-avatar size="48" color="pink lighten-3" class="mr-4">
               <v-icon size="16" dark> ri-user-3-line </v-icon>
@@ -164,7 +164,7 @@
       width="400"
     >
       <template v-slot:prepend>
-        <v-toolbar outlined flat color="white" style="margin-left: 1px">
+        <v-toolbar outlined flat color="transparent" style="margin-left: 1px">
           <v-btn icon @click="contactInfo.drawer = false">
             <v-icon>ri-close-line</v-icon>
           </v-btn>
@@ -189,7 +189,7 @@
           </v-tooltip>
         </v-toolbar>
       </template>
-      <v-card flat class="text-center mt-16">
+      <v-card flat color="transparent" class="text-center mt-16">
         <v-list-item-avatar size="160" color="blue lighten-3" class="mr-4">
           <v-icon size="32" dark> ri-user-3-line </v-icon>
         </v-list-item-avatar>
@@ -462,5 +462,12 @@ export default {
   .v-tabs-items {
     background-color: rgba(255, 255, 255, 0) !important;
   }
+}
+.theme--dark.v-tabs > .v-tabs-bar {
+  background-color: rgba(0, 0, 0, 0) !important;
+}
+
+::-webkit-scrollbar {
+  width: 0;
 }
 </style>
