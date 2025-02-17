@@ -59,7 +59,7 @@
           id="chatContainer"
           color="transparent"
           class="overflow-y-auto"
-          height="calc(100vh - 128px)"
+          height="calc(100vh - 180px)"
         >
           <v-list :key="conversation.key" color="transparent" class="messages-container">
             <template v-for="(item, index) in conversation.rows">
@@ -103,24 +103,7 @@ export default {
       userClientId: Date.now() + Math.random().toString().replaceAll(".", ""),
       conversation: {
         key: 0,
-        rows: [
-          {
-            chatId: "706ea58d-7f79-4752-b872-73c9ca6c9923",
-            clientUserId: "8888",
-            clientUserName: "Guest - 5242",
-            message: {
-              id: "c6db16a1-e69d-4074-88f9-9b09b0a37b70",
-              from: {
-                user: "guest",
-                refId: "8888",
-              },
-              body: "halo kk",
-              type: "text",
-            },
-            lastMessage: "halo",
-            updatedAt: "",
-          },
-        ],
+        rows: [],
       },
       form: {
         message: "",
@@ -144,6 +127,7 @@ export default {
       this.scrolToBottom();
     },
     initIO() {
+      const vm = this;
       const socket = io(process.env.API_URL);
       const userClientId = this.userClientId;
 
@@ -153,9 +137,20 @@ export default {
         });
       });
 
-      this.onChatMessageIncoming(socket);
+      socket.on("chat_message", function (stream) {
+        const data = stream.data;
+        vm.onChatMessageIncoming(data);
+      });
+    },
+    onChatMessageIncoming(data) {
+      this.conversation.rows.push(data);
+      this.conversation.key++;
     },
     async sendMessage() {
+      if (this.form.message === "") {
+        return;
+      }
+
       // conversation message
       const message = {
         body: this.form.message,
@@ -220,13 +215,6 @@ export default {
         const element = document.getElementById("chatContainer");
         element.scrollTop = element.offsetHeight + element.scrollHeight;
       }, 100);
-    },
-    onChatMessageIncoming(socket) {
-      const vm = this;
-      socket.on("chat_message", function (stream) {
-        const data = stream.data;
-        vm.$nuxt.$emit("indexChatIncomingMessage", data);
-      });
     },
   },
   mounted() {
