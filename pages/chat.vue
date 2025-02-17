@@ -59,7 +59,7 @@
           id="chatContainer"
           color="transparent"
           class="overflow-y-auto"
-          height="calc(100vh - 180px)"
+          height="calc(100vh - 100px)"
         >
           <v-list :key="conversation.key" color="transparent" class="messages-container">
             <template v-for="(item, index) in conversation.rows">
@@ -123,8 +123,6 @@ export default {
 
       this.initIO();
       this.sdk.auth = true;
-
-      this.scrolToBottom();
     },
     initIO() {
       const vm = this;
@@ -178,6 +176,9 @@ export default {
       this.conversation.rows.push(conversationMessage);
       this.form.message = "";
 
+      // scroll to bottom
+      this.scrolToBottom();
+
       // send message
       const item = {
         from: {
@@ -206,9 +207,6 @@ export default {
         ...{ isSending: false },
       };
       this.conversation.key++;
-
-      // scroll to bottom
-      this.scrolToBottom();
     },
     scrolToBottom() {
       setTimeout(() => {

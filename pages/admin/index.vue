@@ -150,7 +150,7 @@
         id="chatContainer"
         color="transparent"
         class="overflow-y-auto"
-        height="calc(100vh - 180px)"
+        height="calc(100vh - 100px)"
       >
         <v-list :key="conversation.key" color="transparent" class="messages-container">
           <template v-for="(item, index) in conversation.rows">
@@ -418,6 +418,9 @@ export default {
       this.conversation.rows.push(conversationMessage);
       this.form.message = "";
 
+      // scroll to bottom
+      this.scrolToBottom();
+
       // send message
       const item = {
         sendTo: clientUserId,
@@ -435,22 +438,19 @@ export default {
         // TODO: handle error
         return;
       }
+      const resData = sendMessage.data.data;
 
       // update chat latest message
       chat.lastMessage = resData.message.body;
       chat.updatedAt = resData.updatedAt;
 
       // update last message
-      const resData = sendMessage.data.data;
       const lasIndexMessage = this.conversation.rows.length - 1;
       this.conversation.rows[lasIndexMessage] = {
         ...resData,
         ...{ isSending: false },
       };
       this.conversation.key++;
-
-      // scroll to bottom
-      this.scrolToBottom();
     },
     scrolToBottom() {
       setTimeout(() => {
