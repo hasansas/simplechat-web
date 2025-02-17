@@ -150,7 +150,7 @@
         id="chatContainer"
         color="transparent"
         class="overflow-y-auto"
-        height="calc(100vh - 128px)"
+        height="calc(100vh - 180px)"
       >
         <v-list :key="conversation.key" color="transparent" class="messages-container">
           <template v-for="(item, index) in conversation.rows">
@@ -312,10 +312,6 @@
             </v-expansion-panel>
           </v-expansion-panels>
         </v-card-text>
-
-        <!-- <div class="mt-8">
-          <v-btn depressed color="primary">Add to contact</v-btn>
-        </div> -->
       </v-card>
     </v-navigation-drawer>
   </v-sheet>
@@ -329,6 +325,7 @@ export default {
   layout: "admin",
   computed: {
     ...mapGetters({
+      user: "users/user",
       client: "client/data",
     }),
   },
@@ -337,15 +334,7 @@ export default {
       chat: {
         drawer: true,
         tabs: null,
-        rows: [
-          {
-            chatId: "706ea58d-7f79-4752-b872-73c9ca6c9923",
-            clientUserId: "8888",
-            clientUserName: "Guest - 8612",
-            lastMessage: "halo",
-            updatedAt: 1739780869175,
-          },
-        ],
+        rows: [],
         selected: null,
       },
       conversation: {
@@ -367,8 +356,8 @@ export default {
     },
     selectChat(item) {
       this.chat.selected = item;
-      this.contactInfo.drawer = true;
       this.conversation.rows = item?.conversation || [];
+      this.contactInfo.drawer = true;
     },
     onChatMessageIncoming(data) {
       const chats = this.chat.rows;
@@ -378,8 +367,15 @@ export default {
       const chat = chats.find((e) => e.chatId === chatId);
 
       if (typeof chat === "undefined") {
-        data.conversation = data;
-        this.chat.rows.unshift(data);
+        const chatMessage = {
+          chatId: data.chatId,
+          clientUserId: data.clientUserId,
+          clientUserName: data.clientUserName,
+          lastMessage: data.lastMessage,
+          updatedAt: data.updatedAt,
+          conversation: [data],
+        };
+        this.chat.rows.unshift(chatMessage);
       } else {
         chat.lastMessage = data.message.body;
         chat.updatedAt = data.updatedAt;
@@ -387,30 +383,50 @@ export default {
       }
     },
     async sendMessage() {
+      if (this.form.message === "") {
+        return;
+      }
+
+      const chat = this.chat.selected;
+      const clientUserId = chat.clientUserId;
+
       // conversation message
       const message = {
         body: this.form.message,
         type: "text",
       };
+      const from = {
+        user: "registered_user",
+        refId: this.user.id,
+      };
       const conversationMessage = {
-        id: Date.now() + Math.random().toString().replaceAll(".", ""),
-        message: message,
-        isMe: true,
+        chatId: Date.now() + Math.random().toString().replaceAll(".", ""),
+        clientUserId: this.userClientId(),
+        clientUserName: "",
+        message: {
+          ...{
+            id: "",
+            from: from,
+          },
+          ...message,
+        },
+        lastMessage: message.body,
+        updatedAt: Date.now(),
         isSending: true,
-        createdAt: Date.now(),
       };
 
-      this.conversation.push(conversationMessage);
+      this.conversation.rows.push(conversationMessage);
       this.form.message = "";
 
       // send message
-      const sdkKey = this.client.sdkKey;
       const item = {
-        from: this.userClientId,
+        sendTo: clientUserId,
+        from: from,
         message: message,
       };
+
       const sendMessage = await this.$store.dispatch("chats/sendMessage", {
-        key: sdkKey,
+        key: this.client.sdkKey,
         body: item,
       });
 
@@ -419,7 +435,15 @@ export default {
         // TODO: handle error
         return;
       }
-      conversationMessage.isSending = false;
+
+      // update last message
+      const resData = sendMessage.data.data;
+      const lasIndexMessage = this.conversation.rows.length - 1;
+      this.conversation.rows[lasIndexMessage] = {
+        ...resData,
+        ...{ isSending: false },
+      };
+      this.conversation.key++;
 
       // scroll to bottom
       this.scrolToBottom();
