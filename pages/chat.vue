@@ -59,12 +59,17 @@
           id="chatContainer"
           color="transparent"
           class="overflow-y-auto"
-          height="calc(100vh - 102px)"
+          height="calc(100vh - 128px)"
         >
-          <v-list color="transparent" class="messages-container">
-            <template v-for="(item, index) in conversation">
+          <v-list :key="conversation.key" color="transparent" class="messages-container">
+            <template v-for="(item, index) in conversation.rows">
               <v-list-item :key="index">
-                <div class="message" :class="item.isMe ? 'sent ml-auto' : 'received'">
+                <div
+                  class="message"
+                  :class="
+                    item.clientUserId === userClientId ? 'sent ml-auto' : 'received'
+                  "
+                >
                   <div v-if="item?.isSending" class="py-2 px-3">
                     <v-card flat color="transparent" width="40" height="16">
                       <div class="loader"></div>
@@ -86,6 +91,7 @@
 
 <script>
 export default {
+  layout: "chat",
   data() {
     return {
       sdk: {
@@ -95,70 +101,27 @@ export default {
       },
       userId: Date.now() + Math.random().toString().replaceAll(".", ""),
       userClientId: Date.now() + Math.random().toString().replaceAll(".", ""),
-      conversation: [
-        {
-          id: "4f1d6e2b-d67e-4d65-81ad-4d464b1be581",
-          message: {
-            body: "halo",
-            type: "text",
+      conversation: {
+        key: 0,
+        rows: [
+          {
+            chatId: "706ea58d-7f79-4752-b872-73c9ca6c9923",
+            clientUserId: "8888",
+            clientUserName: "Guest - 5242",
+            message: {
+              id: "c6db16a1-e69d-4074-88f9-9b09b0a37b70",
+              from: {
+                user: "guest",
+                refId: "8888",
+              },
+              body: "halo kk",
+              type: "text",
+            },
+            lastMessage: "halo",
+            updatedAt: "",
           },
-          isMe: false,
-          createdAt: "2025-01-04T05:24:19.541Z",
-        },
-        {
-          id: "74c1c57c-06dd-461c-bfb1-79f2ed1b87bb",
-          message: {
-            sendTo: "6285743603758",
-            type: "text",
-            body:
-              "Selamat datang {{contact_name}} di layanan Vemoblast, One Stop Digital Marketing Tools untuk segala kebutuhan bisnis digital Anda.\nSilakan pilih menu berikut dengan mengetikkan angka sesuai dengan pilihan menunya:\n1. Informasi Produk dan Layanan\n2. Informasi Kerja Sama / Partnership\n3. Informasi Promo\n4. Layanan Keluhan Pelanggan\n5. Dokumentasi Vemoblast\n6. AI Assistant Vemoblast",
-          },
-          isMe: true,
-          createdAt: "2025-01-04T05:24:19.541Z",
-        },
-        {
-          id: "75c065cb-2b05-4ff9-bab7-30ef94a7c0ae",
-          message: {
-            sendTo: "6285743603758",
-            type: "text",
-            body:
-              "Sorry, because we did not receive any response, we are ending this conversation. Thank you for contacting us",
-          },
-          isMe: true,
-          createdAt: "2025-01-04T05:25:20.633Z",
-        },
-        {
-          id: "4f1d6e2b-d67e-4d65-81ad-4d464b1be581",
-          message: {
-            body: "halo",
-            type: "text",
-          },
-          isMe: false,
-          createdAt: "2025-01-04T05:24:19.541Z",
-        },
-        {
-          id: "74c1c57c-06dd-461c-bfb1-79f2ed1b87bb",
-          message: {
-            sendTo: "6285743603758",
-            type: "text",
-            body:
-              "Selamat datang {{contact_name}} di layanan Vemoblast, One Stop Digital Marketing Tools untuk segala kebutuhan bisnis digital Anda.\nSilakan pilih menu berikut dengan mengetikkan angka sesuai dengan pilihan menunya:\n1. Informasi Produk dan Layanan\n2. Informasi Kerja Sama / Partnership\n3. Informasi Promo\n4. Layanan Keluhan Pelanggan\n5. Dokumentasi Vemoblast\n6. AI Assistant Vemoblast",
-          },
-          isMe: true,
-          createdAt: "2025-01-04T05:24:19.541Z",
-        },
-        {
-          id: "75c065cb-2b05-4ff9-bab7-30ef94a7c0ae",
-          message: {
-            sendTo: "6285743603758",
-            type: "text",
-            body:
-              "Sorry, because we did not receive any response, we are ending this conversation. Thank you for contacting us",
-          },
-          isMe: true,
-          createdAt: "2025-01-04T05:25:20.633Z",
-        },
-      ],
+        ],
+      },
       form: {
         message: "",
       },
@@ -199,19 +162,33 @@ export default {
         type: "text",
       };
       const conversationMessage = {
-        id: Date.now() + Math.random().toString().replaceAll(".", ""),
-        message: message,
-        isMe: true,
+        chatId: Date.now() + Math.random().toString().replaceAll(".", ""),
+        clientUserId: this.userClientId,
+        clientUserName: "",
+        message: {
+          ...{
+            id: "",
+            from: {
+              user: "guest",
+              refId: this.userId,
+            },
+          },
+          ...message,
+        },
+        lastMessage: message.body,
+        updatedAt: Date.now(),
         isSending: true,
-        createdAt: Date.now(),
       };
 
-      this.conversation.push(conversationMessage);
+      this.conversation.rows.push(conversationMessage);
       this.form.message = "";
 
       // send message
       const item = {
-        from: this.userClientId,
+        from: {
+          user: "guest",
+          refId: this.userClientId,
+        },
         message: message,
       };
 
@@ -225,7 +202,15 @@ export default {
         // TODO: handle error
         return;
       }
-      conversationMessage.isSending = false;
+
+      // update last message
+      const resData = sendMessage.data.data;
+      const lasIndexMessage = this.conversation.rows.length - 1;
+      this.conversation.rows[lasIndexMessage] = {
+        ...resData,
+        ...{ isSending: false },
+      };
+      this.conversation.key++;
 
       // scroll to bottom
       this.scrolToBottom();

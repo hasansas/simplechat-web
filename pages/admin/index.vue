@@ -45,13 +45,13 @@
             >
               <v-list-item-avatar
                 size="48"
-                :color="stringToColor(item.user.id)"
+                :color="stringToColor(item.clientUserId)"
                 class="mr-4"
               >
                 <v-icon size="16" dark> ri-user-3-line </v-icon>
               </v-list-item-avatar>
               <v-list-item-content>
-                <v-list-item-title> {{ item.user.name }} </v-list-item-title>
+                <v-list-item-title> {{ item.clientUserName }} </v-list-item-title>
                 <v-list-item-subtitle> {{ item.lastMessage }} </v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
@@ -111,7 +111,7 @@
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title>
-                {{ chat.selected.user.name }}
+                {{ chat.selected.clientUserName }}
               </v-list-item-title>
               <v-list-item-subtitle> Not in contact </v-list-item-subtitle>
             </v-list-item-content>
@@ -150,12 +150,17 @@
         id="chatContainer"
         color="transparent"
         class="overflow-y-auto"
-        height="calc(100vh - 102px)"
+        height="calc(100vh - 128px)"
       >
-        <v-list color="transparent" class="messages-container">
-          <template v-for="(item, index) in conversation">
+        <v-list :key="conversation.key" color="transparent" class="messages-container">
+          <template v-for="(item, index) in conversation.rows">
             <v-list-item :key="index">
-              <div class="message" :class="item.isMe ? 'sent ml-auto' : 'received'">
+              <div
+                class="message"
+                :class="
+                  item.clientUserId === userClientId() ? 'sent ml-auto' : 'received'
+                "
+              >
                 <div v-if="item?.isSending" class="py-2 px-3">
                   <v-card flat color="transparent" width="40" height="16">
                     <div class="loader"></div>
@@ -213,7 +218,7 @@
           <v-icon size="32" dark> ri-user-3-line </v-icon>
         </v-list-item-avatar>
         <v-card-title class="headline d-block">
-          {{ chat.selected.user.name }}
+          {{ chat.selected.clientUserName }}
         </v-card-title>
         <v-card-subtitle> Not in contact </v-card-subtitle>
         <v-card-text class="px-0">
@@ -322,6 +327,11 @@ import Convert from "~/helpers/convert.js";
 
 export default {
   layout: "admin",
+  computed: {
+    ...mapGetters({
+      client: "client/data",
+    }),
+  },
   data() {
     return {
       chat: {
@@ -329,76 +339,19 @@ export default {
         tabs: null,
         rows: [
           {
-            id: "a2e2b218-136a-4241-aeea-2048bdfca5b7",
-            user: {
-              id: "a2e2b218-136a-4241-aeea-2048bdfca5b7",
-              name: "John Pixel",
-            },
-            status: "online",
-            lastMessage:
-              "Morbi hendrerit augue eget tortor sagittis, sed fringilla ligula molestie",
-            updatedAt: "2025-02-15T03:37:57.426Z",
-            conversation: [],
-          },
-          {
-            id: "0153b78d-f5c1-42a2-9ffb-aa54a04193b4",
-            user: {
-              id: "0153b78d-f5c1-42a2-9ffb-aa54a04193b4",
-              name: "Baba Yaga",
-            },
-            status: "online",
-            lastMessage: "Suspendisse aliquam semper",
-            updatedAt: "2024-11-04T03:41:35.194Z",
-            conversation: [],
-          },
-          {
-            id: "f7059c4e-b2a1-42eb-ac6f-3da9448e13f4",
-            user: {
-              id: "f7059c4e-b2a1-42eb-ac6f-3da9448e13f4",
-              name: "Baba Yaga",
-            },
-            status: "offline",
-            lastMessage:
-              "Pellentesque imperdiet sem mauris, sit amet euismod sapien egestas eget",
-            updatedAt: "2024-11-11T08:07:15.715Z",
-            conversation: [],
+            chatId: "706ea58d-7f79-4752-b872-73c9ca6c9923",
+            clientUserId: "8888",
+            clientUserName: "Guest - 8612",
+            lastMessage: "halo",
+            updatedAt: 1739780869175,
           },
         ],
         selected: null,
       },
-      conversation: [
-        {
-          id: "4f1d6e2b-d67e-4d65-81ad-4d464b1be581",
-          message: {
-            body: "halo",
-            type: "text",
-          },
-          isMe: false,
-          createdAt: "2025-01-04T05:24:19.541Z",
-        },
-        {
-          id: "74c1c57c-06dd-461c-bfb1-79f2ed1b87bb",
-          message: {
-            sendTo: "6285743603758",
-            type: "text",
-            body:
-              "Selamat datang {{contact_name}} di layanan Vemoblast, One Stop Digital Marketing Tools untuk segala kebutuhan bisnis digital Anda.\nSilakan pilih menu berikut dengan mengetikkan angka sesuai dengan pilihan menunya:\n1. Informasi Produk dan Layanan\n2. Informasi Kerja Sama / Partnership\n3. Informasi Promo\n4. Layanan Keluhan Pelanggan\n5. Dokumentasi Vemoblast\n6. AI Assistant Vemoblast",
-          },
-          isMe: true,
-          createdAt: "2025-01-04T05:24:19.541Z",
-        },
-        {
-          id: "75c065cb-2b05-4ff9-bab7-30ef94a7c0ae",
-          message: {
-            sendTo: "6285743603758",
-            type: "text",
-            body:
-              "Sorry, because we did not receive any response, we are ending this conversation. Thank you for contacting us",
-          },
-          isMe: true,
-          createdAt: "2025-01-04T05:25:20.633Z",
-        },
-      ],
+      conversation: {
+        key: 0,
+        rows: [],
+      },
       contactInfo: {
         drawer: false,
         inputGroup: [0],
@@ -408,48 +361,29 @@ export default {
       },
     };
   },
-  computed: {
-    ...mapGetters({
-      client: "client/data",
-    }),
-  },
   methods: {
+    userClientId() {
+      return Convert.stringToHex(this.client.id);
+    },
     selectChat(item) {
       this.chat.selected = item;
       this.contactInfo.drawer = true;
+      this.conversation.rows = item?.conversation || [];
     },
     onChatMessageIncoming(data) {
       const chats = this.chat.rows;
       const chatId = data.chatId;
-      const message = data.message;
-      const conversation = {
-        id: "75c065cb-2b05-4ff9-bab7-30ef94a7c0ae",
-        message: message,
-        isMe: false,
-        createdAt: "2025-01-04T05:25:20.633Z",
-      };
 
       // get chat
-      const chat = chats.find((e) => e.id === chatId);
+      const chat = chats.find((e) => e.chatId === chatId);
 
       if (typeof chat === "undefined") {
-        const newChat = {
-          id: chatId,
-          user: {
-            id: data.user.refId,
-            name: data.user.name,
-          },
-          status: "online",
-          lastMessage: message.body,
-          updatedAt: message.createdAt,
-          conversation: [conversation],
-        };
-
-        this.chat.rows.unshift(newChat);
+        data.conversation = data;
+        this.chat.rows.unshift(data);
       } else {
-        chat.lastMessage = message.body;
-        chat.updatedAt = message.createdAt;
-        chat.conversation.push(conversation);
+        chat.lastMessage = data.message.body;
+        chat.updatedAt = data.updatedAt;
+        chat.conversation.push(data);
       }
     },
     async sendMessage() {

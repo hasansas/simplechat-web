@@ -147,6 +147,7 @@ import appBaseLayout from "~/layouts/base.vue";
 import Convert from "~/helpers/convert.js";
 
 export default {
+  middleware: "auth",
   components: { appBaseLayout },
   head() {
     return {
@@ -172,6 +173,7 @@ export default {
     return {
       title: "AdminStarter",
       isIOModuleLoaded: false,
+      dataLoaded: false,
       darkmode: false,
       drawer: true,
       fixed: false,
@@ -263,7 +265,7 @@ export default {
 
         // redirect to login page
         this.$router.push({
-          path: "/login",
+          path: "/",
         });
       }
     },
@@ -291,7 +293,10 @@ export default {
         }
       }
     },
-    initIO() {
+    async initIO() {
+      // get client
+      await this.getClient();
+
       const socket = io(process.env.API_URL);
       const clientUser = Convert.stringToHex(this.client.id);
       socket.on("connected", function () {
@@ -322,9 +327,6 @@ export default {
 
     // get user
     await this.getUser();
-
-    // get client
-    this.getClient();
   },
   beforeRouteLeave(to, from, next) {
     const socket = io(process.env.API_URL);
