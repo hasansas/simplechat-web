@@ -27,8 +27,8 @@ export default {
     script: [
       {
         innerHTML: `(function (d) {
-            const b = 'http://localhost:3355';
-            const k = '123456';
+            const b = '${process.env.APP_BASE_URL}';
+            const k = '${process.env.SDK_KEY}';
             const s = d.createElement('script');
             s.src = b + '/sdk.js';
             d.body.appendChild(s);

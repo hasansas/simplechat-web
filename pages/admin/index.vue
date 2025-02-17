@@ -436,6 +436,10 @@ export default {
         return;
       }
 
+      // update chat latest message
+      chat.lastMessage = resData.message.body;
+      chat.updatedAt = resData.updatedAt;
+
       // update last message
       const resData = sendMessage.data.data;
       const lasIndexMessage = this.conversation.rows.length - 1;
