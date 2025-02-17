@@ -228,7 +228,7 @@ export default {
             {
               icon: "ri-layout-bottom-line",
               title: "Widget",
-              to: "#",
+              to: "/admin/settings/widget",
             },
             {
               icon: "ri-layout-masonry-line",
