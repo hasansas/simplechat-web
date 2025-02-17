@@ -2,7 +2,7 @@
   <diV class="fill-height">
     <v-app-bar fixed app flat color="white">
       <v-spacer></v-spacer>
-      <v-btn depressed outlined color="primary" to="/login">
+      <v-btn depressed outlined color="primary" href="/login">
         <span>Login</span>
         <v-icon size="16">ri-arrow-right-line </v-icon>
       </v-btn>
